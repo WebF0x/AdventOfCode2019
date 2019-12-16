@@ -15,17 +15,16 @@ end
 
 def halt
   @halt = true
-  #result = @input[0]
-  #puts "result: #{result}"
-  if @input[0] == 19690720
-    puts "Final result: #{100*@noun*@verb}"
-    exit
-  end
+  # result = @input[0]
+  # puts "result: #{result}"
+  return unless @input[0] == 19_690_720
+
+  puts "Final result: #{100 * @noun * @verb}"
+  exit
 end
 
-for a in 0..99 do
-  for b in 0..99 do
-
+(0..99).each do |a|
+  (0..99).each do |b|
     @input = Marshal.load( Marshal.dump(@baseinput))
     @pointer = 0
 
