@@ -57,3 +57,6 @@ build-iPhoneSimulator/
 
 # IDE
 launch.json
+
+# Advent of code
+input*
