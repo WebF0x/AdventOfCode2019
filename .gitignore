@@ -60,3 +60,6 @@ launch.json
 
 # Advent of code
 input*
+
+# Gemfile.lock
+Gemfile.lock
