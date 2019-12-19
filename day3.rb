@@ -97,7 +97,7 @@ end
 
 #phil
 class Wire
-  attr_accessor :instructions
+  attr_accessor :instructions, :steps
 
   def initialize(instructions)
     reset
@@ -116,12 +116,16 @@ class Wire
   end
 
   def next_instruction
+    unless @current_instruction == 0 
+      @steps += @instructions[@current_instruction-1].amplitude
+    end
     ins = @instructions[@current_instruction]
     @current_instruction += 1
     ins
   end
 
   def reset
+    @steps = 0
     @current_instruction = 0
     @current_segment = nil
   end
@@ -169,15 +173,16 @@ def main
     until (segment_wire2 = wires.last.next_segment).nil? do
       intersection = segment_wire1.intersection(segment_wire2)
       unless intersection.nil?
-        distance = manathan_distance(origin, intersection)
-        if (closest_distance == nil || closest_distance > distance) && distance != 0
-          closest_distance = distance
+        #distance = manathan_distance(origin, intersection)
+        steps = wires.first.steps + wires.last.steps + manathan_distance(segment_wire1.from, intersection) + manathan_distance(segment_wire2.from, intersection)
+        if (closest_distance == nil || closest_distance > steps) && steps != 0
+          closest_distance = steps
         end
       end
     end
   end
 
-  puts "Manhattan distance from the central port to the closest intersection: #{closest_distance}"
+  puts "What is the fewest combined steps the wires must take to reach an intersection? #{closest_distance}"
 
 end
 
