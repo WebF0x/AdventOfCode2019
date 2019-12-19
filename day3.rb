@@ -37,7 +37,7 @@ class Wire
     if @current_segment.nil?
       here = Point.new(0, 0)
     else
-      here = @current_segment.end
+      here = @current_segment.to
     end
     @current_segment = Segment.new(here, self.next_instruction)
     @current_segment
@@ -47,6 +47,11 @@ class Wire
     next_instruction = @instructions[@current_instruction]
     @current_instruction += 1
     next_instruction
+  end
+
+  def reset
+    @current_instruction = 0
+    @current_segment = nil
   end
 end
 
@@ -79,11 +84,22 @@ def main
     wires << Wire.new(instructions)
   end
 
-  wires.each do |wire|
-    until segment = wire.next_segment.nil? do
-      puts segment
+  origin = Point.new(0,0)
+  closest_distance = nil
+
+  until (segment_wire1 = wires.first.next_segment).nil? do
+    until (segment_wire2 = wires.last.next_segment).nil? do
+      if (intersection = segment_wire1.intersection(segment_wire2))
+        distance = manathan_distance(origin, intersection)
+        if closest_distance == nil || closest_distance > distance
+          closest_distance = distance
+        end
+      end
     end
   end
+
+  puts "Manhattan distance from the central port to the closest intersection: #{distance}"
+
 end
 
 def test_point
