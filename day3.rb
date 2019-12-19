@@ -37,8 +37,9 @@ class Segment
     @to = get_point_after_instruction from, instruction
   end
 
-  def is_collision?(segment)
+  def intersection(segment)
     # si meme sens return false
+    false
   end
 
   protected
@@ -68,8 +69,9 @@ class Wire
     else
       here = @current_segment.to
     end
-    @current_segment = Segment.new(here, self.next_instruction)
-    @current_segment
+    current_instruction = self.next_instruction
+    return if current_instruction.nil?
+    @current_segment = Segment.new(here, current_instruction)
   end
 
   def next_instruction
@@ -127,7 +129,7 @@ def main
     end
   end
 
-  puts "Manhattan distance from the central port to the closest intersection: #{distance}"
+  puts "Manhattan distance from the central port to the closest intersection: #{closest_distance}"
 
 end
 
