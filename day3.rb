@@ -40,20 +40,17 @@ class Segment
   def intersection(segment)
     x = x_collision(segment)
     y = y_collision(segment)
-    unless x.nil? || y.nil?
-      Point.new(x,y)
-    else
-      nil
-    end
+    return nil if x.nil? || y.nil?
+    Point.new(x, y)
   end
 
   private
 
   def x_collision(segment)
-    lower = min(to.x, from.x)
-    higher = max(to.x, from.x)
-    segment_lower = min(segment.to.x, segment.from.x)
-    segment_higher = max(segment.to.x, segment.from.x)
+    lower = [to.x, from.x].min
+    higher = [to.x, from.x].max
+    segment_lower = [segment.to.x, segment.from.x].min
+    segment_higher = [segment.to.x, segment.from.x].max
 
     for i in (lower..higher)
       for j in (segment_lower..segment_higher)
@@ -64,10 +61,10 @@ class Segment
   end
 
   def y_collision(segment)
-    lower = min(to.y, from.y)
-    higher = max(to.y, from.y)
-    segment_lower = min(segment.to.y, segment.from.y)
-    segment_higher = max(segment.to.y, segment.from.y)
+    lower = [to.y, from.y].min
+    higher = [to.y, from.y].max
+    segment_lower = [segment.to.y, segment.from.y].min
+    segment_higher = [segment.to.y, segment.from.y].max
 
     for i in (lower..higher)
       for j in (segment_lower..segment_higher)
@@ -92,9 +89,10 @@ end
 
 #phil
 class Wire
+  attr_accessor :instructions
 
   def initialize(instructions)
-    @current_instruction = 0
+    reset
     @instructions = instructions
   end
 
@@ -110,9 +108,9 @@ class Wire
   end
 
   def next_instruction
-    next_instruction = @instructions[@current_instruction]
+    ins = @instructions[@current_instruction]
     @current_instruction += 1
-    next_instruction
+    ins
   end
 
   def reset
@@ -153,11 +151,18 @@ def main
   origin = Point.new(0,0)
   closest_distance = nil
 
+  seg_i = 0
+  seg_tot = wires.first.instructions.size
+
   until (segment_wire1 = wires.first.next_segment).nil? do
+    wires.last.reset
+    seg_i += 1
+    puts "segment #{seg_i} / segment total: #{seg_tot}"
     until (segment_wire2 = wires.last.next_segment).nil? do
-      if (intersection = segment_wire1.intersection(segment_wire2))
+      intersection = segment_wire1.intersection(segment_wire2)
+      unless intersection.nil?
         distance = manathan_distance(origin, intersection)
-        if closest_distance == nil || closest_distance > distance
+        if (closest_distance == nil || closest_distance > distance) && distance != 0
           closest_distance = distance
         end
       end
@@ -226,12 +231,12 @@ def test_segment_intersection_scanning_vertically
   assert_equal Point.new(3, 10), vertical_segment.intersection(Segment.new(Point.new(0, 10), Instruction.new("R8")))
   assert_equal nil, vertical_segment.intersection(Segment.new(Point.new(0, 11), Instruction.new("R8")))
 
-  vertical_segment = Segment.new(Point.new(10, 3), Instruction.new("D7"))
+  vertical_segment = Segment.new(Point.new(3, 10), Instruction.new("D7"))
   assert_equal nil, vertical_segment.intersection(Segment.new(Point.new(0, 2), Instruction.new("R8")))
   assert_equal Point.new(3, 3), vertical_segment.intersection(Segment.new(Point.new(0, 3), Instruction.new("R8")))
   assert_equal Point.new(3, 5), vertical_segment.intersection(Segment.new(Point.new(0, 5), Instruction.new("R8")))
   assert_equal Point.new(3, 10), vertical_segment.intersection(Segment.new(Point.new(0, 10), Instruction.new("R8")))
-  assert_equal nil, vertical_segment.intersection(Segment.new(Point.new(0, 11, 0), Instruction.new("U8")))
+  assert_equal nil, vertical_segment.intersection(Segment.new(Point.new(0, 11), Instruction.new("U8")))
 end
 
 def all_tests
