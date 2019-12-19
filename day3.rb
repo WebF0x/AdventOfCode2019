@@ -38,7 +38,24 @@ class Segment
   end
 
   def intersection(segment)
-    # si meme sens return false
+    # *--X****
+    # *|*|****
+    # *|*|****
+    # *o-|****
+
+    # vertical
+    if (to.x == from.x)
+      if (segment.to.x <= to.x && segment.from.x >= to.x) || \
+         (segment.to.x >= to.x && segment.from.x <= to.x)
+         # collision on to.x
+         
+      end
+
+    # horizontal
+    elsif (to.y == from.y)
+
+    end
+
     false
   end
 
