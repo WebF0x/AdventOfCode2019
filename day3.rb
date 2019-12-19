@@ -52,10 +52,14 @@ class Segment
     segment_lower = [segment.to.x, segment.from.x].min
     segment_higher = [segment.to.x, segment.from.x].max
 
-    for i in (lower..higher)
-      for j in (segment_lower..segment_higher)
-        return i if i == j
+    unless lower > segment_higher || higher < segment_lower
+      leftmost_collision = [lower, segment_lower].max
+      righmost_collision = [higher, segment_higher].min
+
+      if(leftmost_collision.abs < righmost_collision.abs)
+        return leftmost_collision
       end
+      return righmost_collision
     end
     nil
   end
@@ -66,10 +70,14 @@ class Segment
     segment_lower = [segment.to.y, segment.from.y].min
     segment_higher = [segment.to.y, segment.from.y].max
 
-    for i in (lower..higher)
-      for j in (segment_lower..segment_higher)
-        return i if i == j
+    unless lower > segment_higher || higher < segment_lower
+      leftmost_collision = [lower, segment_lower].max
+      righmost_collision = [higher, segment_higher].min
+
+      if(leftmost_collision.abs < righmost_collision.abs)
+        return leftmost_collision
       end
+      return righmost_collision
     end
     nil
   end
