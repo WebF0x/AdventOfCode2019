@@ -50,11 +50,6 @@ class Wire
   end
 end
 
-#bix
-def init_wires()
-  # input => 2 Wire
-end
-
 # Instruction abstraction
 class Instruction
   attr_accessor :direction, :amplitude
@@ -71,11 +66,22 @@ def main
   # read input file
   input = File.read('input.txt')
 
+  # initialize wires
+  wires = []
+
   # convert input to instructions
   input.each_line do |line|
     instructions = line.split(',')
     instructions.map! do |i|
       Instruction.new(i)
+    end
+
+    wires << Wire.new(instructions)
+  end
+
+  wires.each do |wire|
+    until segment = wire.next_segment.nil? do
+      puts segment
     end
   end
 end
