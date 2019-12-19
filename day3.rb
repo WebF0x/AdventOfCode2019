@@ -27,8 +27,21 @@ end
 
 #phil
 class Wire
-  def next_segment()
 
+  def initialize(instructions)
+    @current_instruction = 0
+    @instructions = instructions
+  end
+
+  def next_segment
+    if @current_segment.nil? here = Point.new(0,0)
+    else here = @current_segment.end
+    @current_segment = Segment.new(here, self.next_instruction)
+    return @current_segment
+  end
+
+  def next_instruction
+    
   end
 end
 
