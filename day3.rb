@@ -38,25 +38,43 @@ class Segment
   end
 
   def intersection(segment)
-    # *--X****
-    # *|*|****
-    # *|*|****
-    # *o-|****
-
-    # vertical
-    if (to.x == from.x)
-      if (segment.to.x <= to.x && segment.from.x >= to.x) || \
-         (segment.to.x >= to.x && segment.from.x <= to.x)
-         # collision on to.x
-         
-      end
-
-    # horizontal
-    elsif (to.y == from.y)
-
+    x = x_collision(segment)
+    y = y_collision(segment)
+    unless x.nil? || y.nil?
+      Point.new(x,y)
+    else
+      nil
     end
+  end
 
-    false
+  private
+
+  def x_collision(segment)
+    lower = min(to.x, from.x)
+    higher = max(to.x, from.x)
+    segment_lower = min(segment.to.x, segment.from.x)
+    segment_higher = max(segment.to.x, segment.from.x)
+
+    for i in (lower..higher)
+      for j in (segment_lower..segment_higher)
+        return i if i == j
+      end
+    end
+    nil
+  end
+
+  def y_collision(segment)
+    lower = min(to.y, from.y)
+    higher = max(to.y, from.y)
+    segment_lower = min(segment.to.y, segment.from.y)
+    segment_higher = max(segment.to.y, segment.from.y)
+
+    for i in (lower..higher)
+      for j in (segment_lower..segment_higher)
+        return i if i == j
+      end
+    end
+    nil
   end
 
   protected
@@ -185,8 +203,8 @@ def test_segment
 end
 
 def test_segment_intersection_scanning_horizontally
-  horizontal_segment = Segment.new(Point.new(3, 3), Instruction.new("R7"))
-  assert_equal nil, horizontal_segment.intersection(Segment.new(Point.new(2, 0), Instruction.new("U8")))
+  horizontal_segment = Segment.new(Point.new(3,3), Instruction.new("R7"))
+  assert_nil horizontal_segment.intersection(Segment.new(Point.new(2,0), Instruction.new("U8")))
   assert_equal Point.new(3, 3), horizontal_segment.intersection(Segment.new(Point.new(3, 0), Instruction.new("U8")))
   assert_equal Point.new(5, 3), horizontal_segment.intersection(Segment.new(Point.new(5, 0), Instruction.new("U8")))
   assert_equal Point.new(10, 3), horizontal_segment.intersection(Segment.new(Point.new(10, 0), Instruction.new("U8")))
