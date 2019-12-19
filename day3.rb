@@ -167,10 +167,27 @@ def test_segment
   assert_equal Point.new(4, 1), segment.to
 end
 
+def test_segment_intersection_scanning_horizontally
+  horizontal_segment = Segment.new(Point.new(3,3), Instruction.new("R7"))
+  assert_equal nil, horizontal_segment.intersection(Segment.new(Point.new(2,0), Instruction.new("U8")))
+  assert_equal Point.new(3, 3), horizontal_segment.intersection(Segment.new(Point.new(3, 0), Instruction.new("U8")))
+  assert_equal Point.new(5, 3), horizontal_segment.intersection(Segment.new(Point.new(5, 0), Instruction.new("U8")))
+  assert_equal Point.new(10, 3), horizontal_segment.intersection(Segment.new(Point.new(10, 0), Instruction.new("U8")))
+  assert_equal nil, horizontal_segment.intersection(Segment.new(Point.new(11,0), Instruction.new("U8")))
+
+  horizontal_segment = Segment.new(Point.new(10,3), Instruction.new("L7"))
+  assert_equal nil, horizontal_segment.intersection(Segment.new(Point.new(2,0), Instruction.new("U8")))
+  assert_equal Point.new(3, 3), horizontal_segment.intersection(Segment.new(Point.new(3, 0), Instruction.new("U8")))
+  assert_equal Point.new(5, 3), horizontal_segment.intersection(Segment.new(Point.new(5, 0), Instruction.new("U8")))
+  assert_equal Point.new(10, 3), horizontal_segment.intersection(Segment.new(Point.new(10, 0), Instruction.new("U8")))
+  assert_equal nil, horizontal_segment.intersection(Segment.new(Point.new(11,0), Instruction.new("U8")))
+end
+
 def all_tests
   test_manathan_distance
   test_point
   test_segment
+  test_segment_intersection_scanning_horizontally
 end
 
 all_tests
