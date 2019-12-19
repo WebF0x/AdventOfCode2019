@@ -21,7 +21,7 @@ end
 #phil
 class Segment
   def is_collision?(segment)
-    #si meme sens return false
+    # si meme sens return false
   end
 end
 
@@ -41,19 +41,38 @@ class Wire
   end
 
   def next_instruction
-    
+
   end
 end
 
 #bix
 def init_wires()
-  #input => 2 Wire
+  # input => 2 Wire
 end
 
-#bix
+# Instruction abstraction
+class Instruction
+  attr_accessor :direction, :amplitude
+
+  # @param [String] returns an instruction
+  def initialize(instruction_string)
+    @direction = instruction_string[0]
+    @amplitude = instruction_string[1..-1].to_i
+  end
+end
+
+# bix
 def main
-  #for fil 1, each segment
-    #check if fil 2 collides  
+  # read input file
+  input = File.read('input.txt')
+
+  # convert input to instructions
+  input.each_line do |line|
+    instructions = line.split(',')
+    instructions.map! do |i|
+      Instruction.new(i)
+    end
+  end
 end
 
 def test_point
