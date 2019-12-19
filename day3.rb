@@ -16,12 +16,41 @@ class Point
     @x = x
     @y = y
   end
+
+  def ==(o)
+    o.class == self.class && o.state == state
+  end
+
+  protected
+
+  def state
+    [@x, @y]
+  end
 end
 
-#phil
+#max
 class Segment
+  attr_accessor :from, :to
+
+  def initialize(from, instruction)
+    @from = from
+    @to = get_point_after_instruction from, instruction
+  end
+
   def is_collision?(segment)
     # si meme sens return false
+  end
+
+  protected
+
+  def get_point_after_instruction(from, instruction)
+    to_x = from.x
+    to_y = from.y
+    instruction.direction == 'U' && to_y += instruction.amplitude
+    instruction.direction == 'D' && to_y -= instruction.amplitude
+    instruction.direction == 'L' && to_x -= instruction.amplitude
+    instruction.direction == 'R' && to_x += instruction.amplitude
+    Point.new(to_x, to_y)
   end
 end
 
@@ -127,9 +156,19 @@ def test_manathan_distance
   assert_equal 3, manathan_distance(Point.new(2,1), Point.new(0,0))
 end
 
+def test_segment
+  # *****
+  # *A**B
+  # *****
+  segment = Segment.new(Point.new(1,1), Instruction.new("R3"))
+  assert_equal Point.new(1, 1), segment.from
+  assert_equal Point.new(4, 1), segment.to
+end
+
 def all_tests
   test_manathan_distance
   test_point
+  test_segment
 end
 
 all_tests
