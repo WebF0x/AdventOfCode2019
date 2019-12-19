@@ -185,19 +185,35 @@ def test_segment
 end
 
 def test_segment_intersection_scanning_horizontally
-  horizontal_segment = Segment.new(Point.new(3,3), Instruction.new("R7"))
-  assert_equal nil, horizontal_segment.intersection(Segment.new(Point.new(2,0), Instruction.new("U8")))
+  horizontal_segment = Segment.new(Point.new(3, 3), Instruction.new("R7"))
+  assert_equal nil, horizontal_segment.intersection(Segment.new(Point.new(2, 0), Instruction.new("U8")))
   assert_equal Point.new(3, 3), horizontal_segment.intersection(Segment.new(Point.new(3, 0), Instruction.new("U8")))
   assert_equal Point.new(5, 3), horizontal_segment.intersection(Segment.new(Point.new(5, 0), Instruction.new("U8")))
   assert_equal Point.new(10, 3), horizontal_segment.intersection(Segment.new(Point.new(10, 0), Instruction.new("U8")))
-  assert_equal nil, horizontal_segment.intersection(Segment.new(Point.new(11,0), Instruction.new("U8")))
+  assert_equal nil, horizontal_segment.intersection(Segment.new(Point.new(11, 0), Instruction.new("U8")))
 
-  horizontal_segment = Segment.new(Point.new(10,3), Instruction.new("L7"))
+  horizontal_segment = Segment.new(Point.new(10, 3), Instruction.new("L7"))
   assert_equal nil, horizontal_segment.intersection(Segment.new(Point.new(2,0), Instruction.new("U8")))
   assert_equal Point.new(3, 3), horizontal_segment.intersection(Segment.new(Point.new(3, 0), Instruction.new("U8")))
   assert_equal Point.new(5, 3), horizontal_segment.intersection(Segment.new(Point.new(5, 0), Instruction.new("U8")))
   assert_equal Point.new(10, 3), horizontal_segment.intersection(Segment.new(Point.new(10, 0), Instruction.new("U8")))
-  assert_equal nil, horizontal_segment.intersection(Segment.new(Point.new(11,0), Instruction.new("U8")))
+  assert_equal nil, horizontal_segment.intersection(Segment.new(Point.new(11, 0), Instruction.new("U8")))
+end
+
+def test_segment_intersection_scanning_vertically
+  vertical_segment = Segment.new(Point.new(3, 3), Instruction.new("U7"))
+  assert_equal nil, vertical_segment.intersection(Segment.new(Point.new(0, 2), Instruction.new("R8")))
+  assert_equal Point.new(3, 3), vertical_segment.intersection(Segment.new(Point.new(0, 3), Instruction.new("R8")))
+  assert_equal Point.new(3, 5), vertical_segment.intersection(Segment.new(Point.new(0, 5), Instruction.new("R8")))
+  assert_equal Point.new(3, 10), vertical_segment.intersection(Segment.new(Point.new(0, 10), Instruction.new("R8")))
+  assert_equal nil, vertical_segment.intersection(Segment.new(Point.new(0, 11), Instruction.new("R8")))
+
+  vertical_segment = Segment.new(Point.new(10, 3), Instruction.new("D7"))
+  assert_equal nil, vertical_segment.intersection(Segment.new(Point.new(0, 2), Instruction.new("R8")))
+  assert_equal Point.new(3, 3), vertical_segment.intersection(Segment.new(Point.new(0, 3), Instruction.new("R8")))
+  assert_equal Point.new(3, 5), vertical_segment.intersection(Segment.new(Point.new(0, 5), Instruction.new("R8")))
+  assert_equal Point.new(3, 10), vertical_segment.intersection(Segment.new(Point.new(0, 10), Instruction.new("R8")))
+  assert_equal nil, vertical_segment.intersection(Segment.new(Point.new(0, 11, 0), Instruction.new("U8")))
 end
 
 def all_tests
@@ -205,6 +221,7 @@ def all_tests
   test_point
   test_segment
   test_segment_intersection_scanning_horizontally
+  test_segment_intersection_scanning_vertically
 end
 
 all_tests
