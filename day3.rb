@@ -34,8 +34,11 @@ class Wire
   end
 
   def next_segment
-    if @current_segment.nil? here = Point.new(0,0)
-    else here = @current_segment.end
+    if @current_segment.nil?
+      here = Point.new(0, 0)
+    else
+      here = @current_segment.end
+    end
     @current_segment = Segment.new(here, self.next_instruction)
     @current_segment
   end
