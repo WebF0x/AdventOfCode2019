@@ -6,11 +6,16 @@ def never_decrease?(password, max=9)
   return never_decrease?(password / 10, digit)
 end
 
-def two_adjacent?(password, last=nil)
-  return false if password == 0
+def true_two_adjacent?(password, last=nil, count=1)
+  return count == 2 if password == 0
   digit = password % 10
-  return true if last == digit
-  return two_adjacent?(password / 10, digit)
+  if(last == digit)
+    count += 1
+  else
+    return true if count == 2
+    count = 1
+  end
+  return true_two_adjacent?(password / 10, digit, count)
 end
 
 # puzzle input
@@ -21,7 +26,7 @@ current = minimum
 password_count = 0
 
 until current > maximum do
-  if never_decrease?(current) && two_adjacent?(current)
+  if never_decrease?(current) && true_two_adjacent?(current)
     puts current
     password_count += 1
   end
